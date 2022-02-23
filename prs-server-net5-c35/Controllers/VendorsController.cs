@@ -48,7 +48,7 @@ namespace prs_server_net5_c35.Controllers {
                 sortedLines[l.Id].Quantity += l.Quantity;
             }
             po.Polines = sortedLines.Values;
-            po.Total = sortedLines.Sum(x => x.Value.LineTotal);
+            po.Total = po.Polines.Sum(x => x.LineTotal);
             return Ok(po);
         }
 
