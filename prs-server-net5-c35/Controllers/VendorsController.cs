@@ -32,7 +32,7 @@ namespace prs_server_net5_c35.Controllers {
                             on p.Id equals l.ProductId
                         join r in _context.Requests
                             on l.RequestId equals r.Id
-                        where r.Status.Equals("APPROVED")
+                        where r.Status.Equals("APPROVED") && v.Id == vendorId
                         select new {
                             p.Id, Product = p.Name, l.Quantity, p.Price,
                             LineTotal = p.Price * l.Quantity
