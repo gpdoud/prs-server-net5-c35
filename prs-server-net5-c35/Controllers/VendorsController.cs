@@ -38,7 +38,7 @@ namespace prs_server_net5_c35.Controllers {
                             LineTotal = p.Price * l.Quantity
                         };
             var sortedLines = new SortedList<int, Poline>();
-            foreach(var l in lines) {
+            foreach(var l in lines.ToList()) {
                 if(!sortedLines.ContainsKey(l.Id)) {
                     var poline = new Poline() {
                         Product = l.Product, Quantity = 0, Price = l.Price, LineTotal = l.LineTotal
@@ -46,8 +46,12 @@ namespace prs_server_net5_c35.Controllers {
                     sortedLines.Add(l.Id, poline);
                 }
                 sortedLines[l.Id].Quantity += l.Quantity;
+                //sortedLines[l.Id].LineTotal = sortedLines[l.Id].Quantity * sortedLines[l.Id].Price;
             }
             po.Polines = sortedLines.Values;
+            foreach(var poline in po.Polines) {
+                poline.LineTotal = poline.Quantity * poline.Price;
+            }
             po.Total = po.Polines.Sum(x => x.LineTotal);
             return Ok(po);
         }
