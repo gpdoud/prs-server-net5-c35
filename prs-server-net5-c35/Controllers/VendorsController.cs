@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using prs_server_net5_c35.ViewModels;
 using PrsLibrary.Models;
 
 namespace prs_server_net5_c35.Controllers {
@@ -17,6 +17,39 @@ namespace prs_server_net5_c35.Controllers {
 
         public VendorsController(PrsDbContext context) {
             _context = context;
+        }
+
+        // GET: api/Vendors/Po/5
+        [HttpGet("po/{vendorId}")]
+        public async Task<ActionResult<Po>> Po(int vendorId) {
+            var po = new Po();
+            po.Vendor = await _context.Vendors.FindAsync(vendorId);
+
+            var lines = from v in _context.Vendors
+                        join p in _context.Products
+                            on v.Id equals p.VendorId
+                        join l in _context.Requestlines
+                            on p.Id equals l.ProductId
+                        join r in _context.Requests
+                            on l.RequestId equals r.Id
+                        where r.Status.Equals("APPROVED")
+                        select new {
+                            p.Id, Product = p.Name, l.Quantity, p.Price,
+                            LineTotal = p.Price * l.Quantity
+                        };
+            var sortedLines = new SortedList<int, Poline>();
+            foreach(var l in lines) {
+                if(!sortedLines.ContainsKey(l.Id)) {
+                    var poline = new Poline() {
+                        Product = l.Product, Quantity = 0, Price = l.Price, LineTotal = l.LineTotal
+                    };
+                    sortedLines.Add(l.Id, poline);
+                }
+                sortedLines[l.Id].Quantity += l.Quantity;
+            }
+            po.Polines = sortedLines.Values;
+            po.Total = sortedLines.Sum(x => x.Value.LineTotal);
+            return Ok(po);
         }
 
         // GET: api/Vendors

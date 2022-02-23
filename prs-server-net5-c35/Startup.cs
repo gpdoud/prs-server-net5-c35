@@ -25,7 +25,11 @@ namespace prs_server_net5_c35 {
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
             services.AddDbContext<PrsDbContext>(x => {
-                x.UseSqlServer(Configuration.GetConnectionString("PrsDbContext"));
+                var connStrKey = "PrsDbContext"; // production
+#if DEBUG
+                connStrKey += (Environment.OSVersion.Platform == PlatformID.Win32NT) ? "Win" : "Mac";
+#endif
+                x.UseSqlServer(Configuration.GetConnectionString(connStrKey));
             });
             services.AddControllers();
             services.AddCors();

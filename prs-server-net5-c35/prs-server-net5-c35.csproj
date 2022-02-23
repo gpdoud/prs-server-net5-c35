@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="microsoft.entityframeworkcore.sqlserver" Version="5.0.12" />
-    <PackageReference Include="microsoft.entityframeworkcore.tools" Version="5.0.12">
+    <PackageReference Include="microsoft.entityframeworkcore.sqlserver" Version="5.0.14" />
+    <PackageReference Include="microsoft.entityframeworkcore.tools" Version="5.0.14">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -35,4 +35,10 @@
     </Compile>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="ViewModels\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
 </Project>
