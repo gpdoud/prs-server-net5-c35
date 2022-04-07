@@ -79,7 +79,6 @@ namespace prs_server_net5_c35.Controllers {
             if (id != request.Id) {
                 return BadRequest();
             }
-
             _context.Entry(request).State = EntityState.Modified;
 
             try {

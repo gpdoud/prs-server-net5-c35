@@ -25,9 +25,12 @@ namespace prs_server_net5_c35.Controllers {
             request.Total = (from rl in _context.Requestlines
                             join p in _context.Products
                             on rl.ProductId equals p.Id
+                            where rl.RequestId == requestId
                             select new {
                                 LineTotal = rl.Quantity * p.Price
                             }).Sum(x => x.LineTotal);
+            
+            request.Status = "CHANGED";
 
             await _context.SaveChangesAsync();
             return Ok();

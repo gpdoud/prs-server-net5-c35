@@ -21,10 +21,12 @@ namespace prs_server_net5_c35.Controllers {
 
         // GET: api/Users/Username/Password
         [HttpGet("{username}/{password}")]
-        public async Task<ActionResult<User>> Login(string username, string password) {
+        public async Task<ActionResult<User>> Login(string username, string password)
+        {
             var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == username
                                                                     && x.Password == password);
-            if(user is null) {
+            if (user is null)
+            {
                 return NotFound();
             }
 
