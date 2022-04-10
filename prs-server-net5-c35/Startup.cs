@@ -12,6 +12,7 @@ using PrsLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace prs_server_net5_c35 {
@@ -50,6 +51,10 @@ namespace prs_server_net5_c35 {
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
             });
+
+            using var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            scope.ServiceProvider.GetService<PrsDbContext>().Database.Migrate();
+
         }
     }
 }
